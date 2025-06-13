@@ -4,14 +4,17 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-import { StarIcon } from "lucide-react";
+import { Heart, StarIcon } from "lucide-react";
 
-import { generateTenantURL } from "@/lib/utils";
+import { formatCurrency, generateTenantURL } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
   id: string;
   name: string;
   imageUrl?: string | null;
+  description?: string;
   tenantSlug: string;
   tenantImageUrl?: string | null;
   reviewRating: number;
@@ -24,6 +27,7 @@ export const ProductCard = ({
   name,
   imageUrl,
   tenantSlug,
+  description,
   tenantImageUrl,
   reviewRating,
   reviewCount,
@@ -38,50 +42,77 @@ export const ProductCard = ({
   };
 
   return (
-    <Link href={`/products/${id}`}>
-      <div className="hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow border rounded-md bg-white overflow-hidden h-full flex flex-col">
-        <div className="relative aspect-square">
-          <Image
-            alt={name}
-            fill
-            src={imageUrl ?? "/placeholder.png"}
-            className="object-cover"
-          />
-        </div>
-        <div className="p-4 border-y flex flex-col gap-3 flex-1 ">
-          <h2 className="text-lg font-medium line-clamp-4">{name}</h2>
-          <div className="flex items-center gap-2" onClick={handleUserClick}>
-            {tenantImageUrl && (
-              <Image
-                alt={tenantSlug}
-                src={tenantImageUrl}
-                width={16}
-                height={16}
-                className="rounded-full border shrink-0 size-[16px]"
-              />
-            )}
-            <p className="text-sm underline font-medium">{tenantSlug}</p>
+    <Card className="overflow-hidden py-0 transition-all hover:shadow-md">
+      <div className="relative">
+        <Link href={`${generateTenantURL(tenantSlug)}/products/${id}`}>
+          <div className="aspect-square overflow-hidden">
+            <Image
+              src={imageUrl ?? "/placeholder.png"}
+              alt={name}
+              width={400}
+              height={400}
+              className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+            />
           </div>
-          {reviewCount > 0 && (
-            <div className="flex items-center gap-1">
-              <StarIcon className="size-3.5 fill-black" />
-              <p className="text-sm font-medium">
-                {reviewRating} ({reviewCount})
-              </p>
-            </div>
-          )}
-        </div>
-        <div className="p-4">
-          <div className="relative px-2 py-1 border bg-pink-400 w-fit">
-            {new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "TND",
-              maximumFractionDigits: 0,
-            }).format(Number(price))}
-          </div>
-        </div>
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-2 rounded-full bg-white/80 hover:bg-white"
+        >
+          <Heart className="h-5 w-5 text-terracotta" />
+          <span className="sr-only">Add to wishlist</span>
+        </Button>
       </div>
-    </Link>
+      <CardContent className="p-4">
+        <Link href={`${generateTenantURL(tenantSlug)}/products/${id}`}>
+          <h3 className="line-clamp-1 font-medium group-hover:text-terracotta">
+            {name}
+          </h3>
+        </Link>
+        {reviewCount > 0 && (
+          <div className="flex items-center gap-1">
+            <StarIcon className="size-3.5 fill-terracotta" />
+            <p className="text-sm font-medium">
+              {reviewRating} ({reviewCount})
+            </p>
+          </div>
+        )}
+        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+          {description}
+        </p>
+        <div className="mt-2 flex items-center justify-between">
+          <p className="font-semibold text-lg text-terracotta">
+            {formatCurrency(price)}
+          </p>
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 border-terracotta text-terracotta hover:bg-terracotta/10 hover:text-terracotta"
+          >
+            Add
+          </Button>
+        </div>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={handleUserClick}
+        >
+          {tenantImageUrl && (
+            <Image
+              alt={tenantSlug}
+              src={tenantImageUrl}
+              width={16}
+              height={16}
+              className="rounded-full border shrink-0 size-[16px]"
+            />
+          )}
+          <p className=" text-xs text-muted-foreground underline">
+            by {tenantSlug}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

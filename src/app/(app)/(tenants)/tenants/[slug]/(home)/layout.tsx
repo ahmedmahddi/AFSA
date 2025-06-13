@@ -18,14 +18,14 @@ const layout = async ({ children, params }: Props) => {
     })
   );
   return (
-    <div className="min-h-screen bg-[#F4F4F0] flex flex-col">
+    <div className="min-h-screen bg-[#F9F7F4] flex flex-col">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<NavbarSkeleton />}>
           <Navbar slug={slug} />
         </Suspense>
       </HydrationBoundary>
 
-      <div className="flex-1">
+      <div className="flex-1 bg-children">
         <div className="max-w-(--breakpoint-xl) mx-auto">{children}</div>
       </div>
       <Footer />

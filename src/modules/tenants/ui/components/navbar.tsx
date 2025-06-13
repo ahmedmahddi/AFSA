@@ -14,7 +14,7 @@ export const Navbar = ({ slug }: Props) => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.tenants.getOne.queryOptions({ slug }));
   return (
-    <nav className="h-20 border-b font-medium bg-white">
+    <nav className="h-20 border-b font-medium bg-bg">
       <div className="max-w-(--breakpoint-xl) mx-auto flex justify-between items-center h-full px-4 lg:px-12">
         <Link href={generateTenantURL(slug)} className="flex items-center gap-2">
         {data.image?.url && (

@@ -6,7 +6,7 @@ import { Categories } from "./categories";
 import { SearchInput } from "./search-input";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { DEFAULT_BG_COLOR } from "@/modules/home/constans";
+// import { DEFAULT_BG_COLOR } from "@/modules/home/constans";
 import { BreadcrumbNavigation } from "./breadcrumb-navigation";
 
 export const SearchFilters = () => {
@@ -20,7 +20,7 @@ export const SearchFilters = () => {
   const activeCategoryData = data.find(
     category => category.slug === activeCategory
   );
-  const activeCategoryColor = activeCategoryData?.color || DEFAULT_BG_COLOR;
+  //const activeCategoryColor = activeCategoryData?.color || DEFAULT_BG_COLOR;
   const activeCategoryName = activeCategoryData?.name || null;
 
   const activeSubcategory = (params.subcategory as string) || undefined;
@@ -31,8 +31,8 @@ export const SearchFilters = () => {
 
   return (
     <div
-      className="px-4 lg:px-12 py-8 gap-4 border-b flex flex-col w-full"
-      style={{ backgroundColor: activeCategoryColor }}
+      className="px-4 lg:hidden lg:px-12 py-6 gap-4 bg-bg border-b flex flex-col w-full"
+      // style={{ backgroundColor: activeCategoryColor }}
     >
       <SearchInput />
       <div className="hidden lg:block">
@@ -50,7 +50,7 @@ export const SearchFilters = () => {
 export const SearchFiltersSkeleton = () => {
   return (
     <div
-      className="px-4 lg:px-12 py-8 gap-4 border-b flex flex-col w-full"
+      className="px-4 lg:px-12 py-4 gap-4 border-b flex flex-col w-full"
       style={{ backgroundColor: "#f5f5f5" }}
     >
       <SearchInput disabled />

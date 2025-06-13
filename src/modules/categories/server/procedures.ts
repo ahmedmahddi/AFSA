@@ -1,6 +1,9 @@
 //trpc
+import z from "zod";
+
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Category } from "@/payload-types";
+import { DEFAULT_LIMIT } from "@/constants";
 
 export const categoriesRouter = createTRPCRouter({
   getMany: baseProcedure.query(async ({ ctx }) => {
@@ -19,4 +22,24 @@ export const categoriesRouter = createTRPCRouter({
     }));
     return formatedData;
   }),
+});
+
+export const categoriesFilterRouter = createTRPCRouter({
+  getFilters: baseProcedure
+    .input(
+      z.object({
+        cursor: z.number().default(1),
+        limit: z.number().default(DEFAULT_LIMIT),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const data = await ctx.db.find({
+        collection: "categories",
+        page: input.cursor,
+        limit: input.limit,
+        sort: "name",
+      });
+
+      return data;
+    }),
 });

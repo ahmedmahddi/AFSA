@@ -24,6 +24,11 @@ const params = {
       clearOnDefault: true,
     })
     .withDefault([]),
+  categoriesFilter: parseAsArrayOf(parseAsString)
+    .withOptions({
+      clearOnDefault: true,
+    })
+    .withDefault([]),
 };
 
 export const useProductFilters = () => {
