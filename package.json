@@ -11,6 +11,7 @@
     "generate:types": "payload generate:types",
     "db:fresh": "payload migrate:fresh",
     "db:seed": "bun run src/seed.ts",
+    "db:seedProduct": "bun run src/seedProducts.ts",
     "db:reset": "bun run db:fresh && bun run db:seed"
   },
   "dependencies": {
