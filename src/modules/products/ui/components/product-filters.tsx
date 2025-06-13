@@ -48,12 +48,13 @@ export const ProductFilters = () => {
   });
 
   const onClear = () => {
-    setFilters({
+    setFilters(current => ({
+      ...current,
       minPrice: "",
       maxPrice: "",
       tags: [],
       categoriesFilter: [],
-    });
+    }));
   };
 
   const onChange = (key: keyof typeof filters, value: unknown) => {

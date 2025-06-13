@@ -45,7 +45,7 @@ export const ProductList = ({ category, tenantSlug, narrowView }: Props) => {
       <div
         className={cn(
           "grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6",
-          narrowView && "lg:grid-cols-2 xl:grid-cols3 2xl:grid-cols-3"
+          narrowView && "lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
         )}
       >
         {data?.pages

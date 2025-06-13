@@ -21,12 +21,12 @@ export const SearchInput = ({ disabled }: Props) => {
     <div className="flex items-center  gap-2 w-full">
       <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
       <div className="relative w-full ">
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center bg-terracotta rounded-[0px_9999px_9999px_0px] w-12 h-12">
+        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center bg-terracotta rounded-[0px_9999px_9999px_0px] w-12 h-12">
           <SearchIcon className="text-white w-6 h-6" />
         </div>
 
         <Input
-          className="px-4 rounded-full"
+          className="px-4 pr-14 rounded-full"
           placeholder="Search products"
           disabled={disabled}
         />

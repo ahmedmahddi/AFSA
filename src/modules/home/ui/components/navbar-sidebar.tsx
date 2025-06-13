@@ -37,7 +37,7 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
             <Link
               key={item.href}
               href={item.href}
-              className="w-fill text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+              className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
               onClick={() => onOpenChange(false)}
             >
               {item.Children}
@@ -49,7 +49,7 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
               <Link
                 onClick={() => onOpenChange(false)}
                 href="/admin"
-                className="w-fill text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
               >
                 Dashboard
               </Link>
@@ -59,14 +59,14 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
               <Link
                 onClick={() => onOpenChange(false)}
                 href="/sign-in"
-                className="w-fill text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
               >
                 Log in
               </Link>
               <Link
                 onClick={() => onOpenChange(false)}
                 href="/sign-up"
-                className="w-fill text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
               >
                 Start Selling
               </Link>
@@ -76,14 +76,14 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
             <Link
               onClick={() => onOpenChange(false)}
               href="/sign-in"
-              className="w-fill text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+              className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
             >
               Log in
             </Link>
             <Link
               onClick={() => onOpenChange(false)}
               href="/sign-up"
-              className="w-fill text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+              className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
             >
               Start Selling
             </Link>
