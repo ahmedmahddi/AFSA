@@ -22,7 +22,7 @@ import {
   MenuIcon,
   UserIcon,
   SearchIcon,
-  ShoppingCart,
+
   Heart,
   ShoppingBag,
 } from "lucide-react";
@@ -246,7 +246,7 @@ export const Navbar = () => {
             className="size-12 border-0 rounded-full bg-transparent text-terracotta hover:text-sage "
             onClick={() => setIsSidebarOpen(true)}
           >
-            <ShoppingCart strokeWidth={3} />
+            <ShoppingBag strokeWidth={3} />
           </Button>
           <Button
             variant="outline"
