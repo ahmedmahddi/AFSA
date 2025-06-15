@@ -169,7 +169,7 @@ export interface Tenant {
   /**
    * You cannot create products until you submit your Stripe details
    */
-  stripeDdetailsSubmitted?: boolean | null;
+  stripeDetailsSubmitted?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -217,16 +217,54 @@ export interface Category {
 export interface Product {
   id: string;
   tenant?: (string | null) | Tenant;
+  store: string | Tenant;
   name: string;
   description?: string | null;
   /**
-   * Price in TND
+   * Price in the selected currency
    */
   price: number;
+  /**
+   * Original price for discount calculation (optional)
+   */
+  compareAtPrice?: number | null;
+  currency: 'TND' | 'USD' | 'EUR';
+  /**
+   * Stock Keeping Unit - must be unique
+   */
+  sku?: string | null;
+  stock: number;
+  variants?:
+    | {
+        name: string;
+        price: number;
+        stock: number;
+        sku?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  images?:
+    | {
+        image: string | Media;
+        /**
+         * Alternative text for accessibility
+         */
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   category?: (string | null) | Category;
   tags?: (string | Tag)[] | null;
-  image?: (string | null) | Media;
   refundPolicy?: ('30-day' | '14-day' | '7-day' | '3-day' | '1-day' | 'no-refunds') | null;
+  reviews?:
+    | {
+        user?: (string | null) | User;
+        rating: number;
+        comment?: string | null;
+        reviewDate?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -374,13 +412,42 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   tenant?: T;
+  store?: T;
   name?: T;
   description?: T;
   price?: T;
+  compareAtPrice?: T;
+  currency?: T;
+  sku?: T;
+  stock?: T;
+  variants?:
+    | T
+    | {
+        name?: T;
+        price?: T;
+        stock?: T;
+        sku?: T;
+        id?: T;
+      };
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
   category?: T;
   tags?: T;
-  image?: T;
   refundPolicy?: T;
+  reviews?:
+    | T
+    | {
+        user?: T;
+        rating?: T;
+        comment?: T;
+        reviewDate?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -403,7 +470,7 @@ export interface TenantsSelect<T extends boolean = true> {
   slug?: T;
   image?: T;
   stripeAccountId?: T;
-  stripeDdetailsSubmitted?: T;
+  stripeDetailsSubmitted?: T;
   updatedAt?: T;
   createdAt?: T;
 }

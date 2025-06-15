@@ -22,7 +22,6 @@ import {
   MenuIcon,
   UserIcon,
   SearchIcon,
-
   Heart,
   ShoppingBag,
 } from "lucide-react";
@@ -216,7 +215,10 @@ export const Navbar = () => {
             <Button
               asChild
               variant="outline"
-              className="bg-transparent font-semibold border-2 border-terracotta hover:bg-transparent rounded-full hover:border-2 hover:border-sage hover:text-sage  px-3.5 text-xl text-terracotta  "
+              className={cn(
+                "bg-transparent font-semibold border-2 border-terracotta hover:bg-transparent rounded-full hover:border-2 hover:border-sage hover:text-sage  px-3.5 text-xl text-terracotta",
+                caveat.className
+              )}
             >
               <Link prefetch href="/sign-in">
                 Log in
@@ -224,7 +226,10 @@ export const Navbar = () => {
             </Button>
             <Button
               asChild
-              className="bg-transparent font-semibold border-2 border-terracotta hover:bg-transparent rounded-full hover:border-2 hover:border-sage hover:text-sage  px-3.5 text-xl text-terracotta  "
+              className={cn(
+                "bg-transparent font-semibold border-2 border-terracotta hover:bg-transparent rounded-full hover:border-2 hover:border-sage hover:text-sage  px-3.5 text-xl text-terracotta",
+                caveat.className
+              )}
             >
               <Link prefetch href="/sign-up">
                 Start Selling

@@ -21,12 +21,25 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         elevated:
           "bg-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[4px] hover:-translate-y-[4px] transition-all",
+        customDefault: "bg-primary text-primary-foreground hover:bg-primary/90",
+        customDestructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        customOutline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        customSecondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        customGhost: "hover:bg-accent hover:text-accent-foreground",
+        customlink: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "h-12 px-4 py-2 has-[>svg]:px-3",
         sm: "h-10 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-12 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
+        customDefault: "h-10 px-4 py-2",
+        customSm: "h-9 rounded-md px-3",
+        customLg: "h-11 rounded-md px-8",
+        customIcon: "h-10 w-10",
       },
     },
     defaultVariants: {

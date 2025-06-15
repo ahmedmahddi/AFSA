@@ -19,7 +19,7 @@ const pages = async ({ params, searchParams }: Props) => {
   const queryClient = getQueryClient();
   void queryClient.prefetchInfiniteQuery(
     trpc.products.getMany.infiniteQueryOptions({
-      tenantSlug: slug,
+      storeSlug: slug,
       ...filters,
       limit: DEFAULT_LIMIT,
     })
