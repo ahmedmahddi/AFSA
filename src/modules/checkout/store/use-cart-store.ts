@@ -1,62 +1,164 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface TenantCart {
-  productIds: string[];
+interface CartItem {
+  productId: string;
+  variantId?: string;
+  variantName?: string;
+  variantSku?: string;
+  quantity: number;
+}
+
+interface StoreCart {
+  items: CartItem[];
 }
 
 interface CartState {
-  tenantCarts: Record<string, TenantCart>;
-  addProduct: (tenantSlug: string, productId: string) => void;
-  removeProduct: (tenantSlug: string, productId: string) => void;
-  clearCart: (tenantSlug: string) => void;
+  storeCarts: Record<string, StoreCart>;
+  addProduct: (
+    storeSlug: string,
+    productId: string,
+    variantId?: string,
+    variantName?: string,
+    variantSku?: string,
+    quantity?: number
+  ) => void;
+  removeProduct: (
+    storeSlug: string,
+    productId: string,
+    variantId?: string
+  ) => void;
+  clearCart: (storeSlug: string) => void;
   clearAllCarts: () => void;
-  getCartByTenant: (tenantSlug: string) => string[];
-  getAllProducts: () => { tenantSlug: string; productId: string }[];
+  getCartByStore: (storeSlug: string) => CartItem[];
+  getAllProducts: () => { storeSlug: string; item: CartItem }[];
+  updateQuantity: (
+    storeSlug: string,
+    productId: string,
+    variantId?: string,
+    quantity?: number
+  ) => void;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
-      tenantCarts: {},
-      addProduct: (tenantSlug, productId) =>
-        set(state => ({
-          tenantCarts: {
-            ...state.tenantCarts,
-            [tenantSlug]: {
-              productIds: [
-                ...(state.tenantCarts[tenantSlug]?.productIds ?? []),
+      storeCarts: {},
+      addProduct: (
+        storeSlug,
+        productId,
+        variantId,
+        variantName,
+        variantSku,
+        quantity = 1
+      ) =>
+        set(state => {
+          const existingCart = state.storeCarts[storeSlug] ?? { items: [] };
+          const existingItemIndex = existingCart.items.findIndex(
+            item => item.productId === productId && item.variantId === variantId
+          );
+
+          let updatedItems: CartItem[];
+          if (existingItemIndex >= 0) {
+            // Update quantity if item exists
+            updatedItems = [...existingCart.items];
+            updatedItems[existingItemIndex] = {
+              productId: updatedItems[existingItemIndex]!.productId,
+              quantity: updatedItems[existingItemIndex]!.quantity + quantity,
+              variantId: updatedItems[existingItemIndex]!.variantId,
+              variantName: updatedItems[existingItemIndex]!.variantName,
+              variantSku: updatedItems[existingItemIndex]!.variantSku,
+            };
+          } else {
+            // Add new item
+            updatedItems = [
+              ...existingCart.items,
+              {
                 productId,
-              ],
+                variantId,
+                variantName,
+                variantSku,
+                quantity,
+              },
+            ];
+          }
+
+          return {
+            storeCarts: {
+              ...state.storeCarts,
+              [storeSlug]: { items: updatedItems },
             },
-          },
-        })),
-      removeProduct: (tenantSlug, productId) =>
+          };
+        }),
+      removeProduct: (storeSlug, productId, variantId) =>
         set(state => ({
-          tenantCarts: {
-            ...state.tenantCarts,
-            [tenantSlug]: {
-              productIds:
-                state.tenantCarts[tenantSlug]?.productIds.filter(
-                  id => id !== productId
+          storeCarts: {
+            ...state.storeCarts,
+            [storeSlug]: {
+              items:
+                state.storeCarts[storeSlug]?.items.filter(
+                  item =>
+                    !(
+                      item.productId === productId &&
+                      item.variantId === variantId
+                    )
                 ) ?? [],
             },
           },
         })),
-      clearCart: tenantSlug =>
+      clearCart: storeSlug =>
         set(state => ({
-          tenantCarts: {
-            ...state.tenantCarts,
-            [tenantSlug]: { productIds: [] },
+          storeCarts: {
+            ...state.storeCarts,
+            [storeSlug]: { items: [] },
           },
         })),
-      clearAllCarts: () => set({ tenantCarts: {} }),
-      getCartByTenant: tenantSlug =>
-        get().tenantCarts[tenantSlug]?.productIds ?? [],
+      clearAllCarts: () => set({ storeCarts: {} }),
+      getCartByStore: storeSlug => get().storeCarts[storeSlug]?.items ?? [],
       getAllProducts: () =>
-        Object.entries(get().tenantCarts).flatMap(([tenantSlug, cart]) =>
-          cart.productIds.map((productId) => ({ tenantSlug, productId }))
+        Object.entries(get().storeCarts).flatMap(([storeSlug, cart]) =>
+          cart.items.map(item => ({ storeSlug, item }))
         ),
+      updateQuantity: (storeSlug, productId, variantId, quantity) =>
+        set(state => {
+          const existingCart = state.storeCarts[storeSlug] ?? { items: [] };
+          const itemIndex = existingCart.items.findIndex(
+            item => item.productId === productId && item.variantId === variantId
+          );
+
+          if (itemIndex >= 0 && quantity !== undefined && quantity > 0) {
+            const updatedItems = [...existingCart.items];
+            updatedItems[itemIndex] = {
+              productId: updatedItems[itemIndex]!.productId,
+              variantId: updatedItems[itemIndex]!.variantId,
+              variantName: updatedItems[itemIndex]!.variantName,
+              variantSku: updatedItems[itemIndex]!.variantSku,
+              quantity,
+            };
+            return {
+              storeCarts: {
+                ...state.storeCarts,
+                [storeSlug]: { items: updatedItems },
+              },
+            };
+          } else if (
+            itemIndex >= 0 &&
+            quantity !== undefined &&
+            quantity <= 0
+          ) {
+            return {
+              storeCarts: {
+                ...state.storeCarts,
+                [storeSlug]: {
+                  items: existingCart.items.filter(
+                    (_, index) => index !== itemIndex
+                  ),
+                },
+              },
+            };
+          }
+          return state;
+        }),
     }),
     {
       name: "afsa-cart",

@@ -5,7 +5,7 @@ export const Tenants: CollectionConfig = {
   admin: {
     useAsTitle: "slug",
   },
-  
+
   fields: [
     // Email added by default
     // Add more fields as needed
@@ -43,7 +43,7 @@ export const Tenants: CollectionConfig = {
       },
     },
     {
-      name: "stripeDdetailsSubmitted",
+      name: "stripeDetailsSubmitted",
       type: "checkbox",
       admin: {
         readOnly: true,
@@ -51,6 +51,5 @@ export const Tenants: CollectionConfig = {
           "You cannot create products until you submit your Stripe details",
       },
     },
-    
   ],
 };

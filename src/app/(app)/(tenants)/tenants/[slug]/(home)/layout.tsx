@@ -18,7 +18,7 @@ const layout = async ({ children, params }: Props) => {
     })
   );
   return (
-    <div className="min-h-screen bg-[#F9F7F4] flex flex-col">
+    <div className="min-h-screen bg-bg flex flex-col">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<NavbarSkeleton />}>
           <Navbar slug={slug} />

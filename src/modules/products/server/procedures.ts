@@ -1,8 +1,7 @@
-//trpc
 import z from "zod";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import type { Sort, Where } from "payload";
-import { Category, Media, Tenant } from "@/payload-types";
+import { Category, Media, Tag, Tenant } from "@/payload-types";
 
 import { sortValues } from "../search-params";
 
@@ -19,13 +18,21 @@ export const productsRouter = createTRPCRouter({
       const product = await ctx.db.findByID({
         collection: "products",
         id: input.id,
-        depth: 2,
+        depth: 3,
       });
 
       return {
         ...product,
-        image: product.image as Media | null,
-        tenant: product.tenant as Tenant & { image: Media | null },
+        image: product.images?.[0]?.image as Media | null,
+        images: product.images?.map(img => ({
+          url: typeof img.image === "string" ? img.image : img.image?.url ?? "",
+          alt: img.alt ?? "",
+        })) ?? [],
+        store: product.store as Tenant & { image: Media | null },
+        category: product.category as Category | null,
+        tags: product.tags as Tag[] | null,
+        reviews: product.reviews ?? [],
+        variants: product.variants ?? [],
       };
     }),
   getMany: baseProcedure
@@ -39,7 +46,7 @@ export const productsRouter = createTRPCRouter({
         tags: z.array(z.string()).nullable().optional(),
         categoriesFilter: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
-        tenantSlug: z.string().nullable().optional(),
+        storeSlug: z.string().nullable().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -71,9 +78,9 @@ export const productsRouter = createTRPCRouter({
         };
       }
 
-      if (input.tenantSlug) {
-        where["tenant.slug"] = {
-          equals: input.tenantSlug,
+      if (input.storeSlug) {
+        where["store.slug"] = {
+          equals: input.storeSlug,
         };
       }
 
@@ -135,9 +142,56 @@ export const productsRouter = createTRPCRouter({
         ...data,
         docs: data.docs.map(doc => ({
           ...doc,
-          image: doc.image as Media | null,
-          tenant: doc.tenant as Tenant & { image: Media | null },
+          image: doc.images?.[0]?.image as Media | null,
+          store: doc.store as Tenant & { image: Media | null },
         })),
       };
+    }),
+  getRelated: baseProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        categorySlug: z.string().nullable().optional(),
+        storeSlug: z.string().nullable().optional(),
+        tags: z.array(z.string()).nullable().optional(),
+        limit: z.number().default(4),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const where: Where = {
+        id: { not_equals: input.productId },
+      };
+
+      if (input.categorySlug) {
+        where["category.slug"] = { equals: input.categorySlug };
+      }
+      if (input.storeSlug) {
+        where["store.slug"] = { equals: input.storeSlug };
+      }
+      if (input.tags && input.tags.length > 0) {
+        where["tags.name"] = { in: input.tags };
+      }
+
+      const data = await ctx.db.find({
+        collection: "products",
+        depth: 2,
+        where,
+        limit: input.limit,
+        sort: "-createdAt",
+      });
+
+      return data.docs.map(doc => ({
+        ...doc,
+        image: doc.images?.[0]?.image as Media | null,
+        images: doc.images?.map(img => ({
+          url: typeof img.image === "string" ? img.image : img.image?.url ?? "",
+          alt: img.alt ?? "",
+        })) ?? [],
+        store: doc.store as Tenant & { image: Media | null },
+        category: doc.category as Category | null,
+        tags: doc.tags as Tag[] | null,
+        reviews: doc.reviews ?? [],
+        variants: doc.variants ?? [],
+      }));
     }),
 });

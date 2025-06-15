@@ -28,7 +28,7 @@ export const ProductListView = ({
           <Suspense fallback={<ProductListSkeleton narrowView={narrowView} />}>
             <ProductList
               category={category}
-              tenantSlug={tenantSlug}
+              storeSlug={tenantSlug}
               narrowView={narrowView}
             />
           </Suspense>
