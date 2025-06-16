@@ -54,7 +54,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
                   by {product.store.name}
                 </p>
                 <p className="mt-2 font-medium text-terracotta">
-                  {formatCurrency(product.price)}
+                  {formatCurrency(product.price, product.currency)}
                 </p>
               </div>
             </div>

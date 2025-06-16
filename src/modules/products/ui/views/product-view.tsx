@@ -72,7 +72,7 @@ export const ProductView = ({ productId, storeSlug }: ProductViewProps) => {
 
   const currentPrice = selectedVariant?.price ?? product.price;
   const currentStock = selectedVariant?.stock ?? product.stock;
-  const isOutOfStock = currentStock === undefined;
+  const isOutOfStock = currentStock === undefined || currentStock <= 0;
 
   const formattedPrice = formatCurrency(
     currentPrice,
@@ -157,6 +157,12 @@ export const ProductView = ({ productId, storeSlug }: ProductViewProps) => {
                 max={currentStock}
                 onChange={handleQuantityChange}
               />
+              {!isOutOfStock && (
+                <QuantitySelector
+                  max={currentStock!}
+                  onChange={handleQuantityChange}
+                />
+              )}
             </div>
 
             {addedToCart && (
