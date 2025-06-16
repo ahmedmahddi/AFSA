@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Tenant } from "@/payload-types";
+import { formatCurrency } from "@/lib/utils";
 
 interface RelatedProduct {
   id: string;
@@ -53,10 +54,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
                   by {product.store.name}
                 </p>
                 <p className="mt-2 font-medium text-terracotta">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: product.currency,
-                  }).format(product.price)}
+                  {formatCurrency(product.price)}
                 </p>
               </div>
             </div>

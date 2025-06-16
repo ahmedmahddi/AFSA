@@ -72,7 +72,7 @@ export const ProductView = ({ productId, storeSlug }: ProductViewProps) => {
 
   const currentPrice = selectedVariant?.price ?? product.price;
   const currentStock = selectedVariant?.stock ?? product.stock;
-  const isOutOfStock = currentStock === 0;
+  const isOutOfStock = currentStock === undefined;
 
   const formattedPrice = formatCurrency(
     currentPrice,
@@ -245,6 +245,7 @@ export const ProductView = ({ productId, storeSlug }: ProductViewProps) => {
             seller={{
               id: product.store.id,
               name: product.store.name,
+              slug: product.store.slug,
               image:
                 product.store.image &&
                 typeof product.store.image === "object" &&
@@ -299,20 +300,8 @@ export const ProductView = ({ productId, storeSlug }: ProductViewProps) => {
         </TabsList>
         <TabsContent value="description" className="pt-4">
           <div className="prose max-w-none">
+            <h3 className="text-2xl font-bold">Product Description</h3>
             <p>{product.description ?? "No description provided."}</p>
-            <h3>Product Features</h3>
-            <ul>
-              <li>Handcrafted with natural materials</li>
-              <li>Unique design - no two pieces are exactly alike</li>
-              <li>Ethically sourced components</li>
-              <li>Made with love and positive intentions</li>
-            </ul>
-            <h3>Care Instructions</h3>
-            <p>
-              To keep your item looking its best, avoid direct sunlight for
-              prolonged periods and dust gently with a soft cloth. Do not use
-              harsh chemicals for cleaning.
-            </p>
           </div>
         </TabsContent>
         <TabsContent value="reviews" className="pt-4" id="reviews">
@@ -329,19 +318,21 @@ export const ProductView = ({ productId, storeSlug }: ProductViewProps) => {
         </TabsContent>
         <TabsContent value="shipping" className="pt-4">
           <div className="prose max-w-none">
-            <h3>Shipping Information</h3>
+            <h3 className="text-2xl font-bold">Shipping Information</h3>
             <p>We offer the following shipping options:</p>
             <ul>
-              <li>Standard Shipping (3-5 business days): $4.99</li>
-              <li>Express Shipping (1-2 business days): $9.99</li>
-              <li>Free shipping on all orders over $50</li>
+              <li>
+                Standard Shipping (3-5 business days): {formatCurrency(5)}
+              </li>
+              <li>Express Shipping (1-2 business days): {formatCurrency(7)}</li>
+              <li>Free shipping on all orders over {formatCurrency(250)}</li>
             </ul>
             <p>
               Please note that shipping times are estimates and may vary
               depending on your location. All orders are processed within 1-2
               business days.
             </p>
-            <h3>Return Policy</h3>
+            <h3 className="text-2xl font-bold">Return Policy</h3>
             <p>
               We accept returns within{" "}
               {product.refundPolicy === "no-refunds"

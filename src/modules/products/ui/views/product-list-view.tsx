@@ -5,13 +5,13 @@ import { ProductList, ProductListSkeleton } from "../components/products-list";
 
 interface Props {
   category?: string;
-  tenantSlug?: string;
+  storeSlug?: string;
   narrowView?: boolean;
 }
 
 export const ProductListView = ({
   category,
-  tenantSlug,
+  storeSlug,
   narrowView,
 }: Props) => {
   return (
@@ -28,7 +28,7 @@ export const ProductListView = ({
           <Suspense fallback={<ProductListSkeleton narrowView={narrowView} />}>
             <ProductList
               category={category}
-              storeSlug={tenantSlug}
+              storeSlug={storeSlug}
               narrowView={narrowView}
             />
           </Suspense>

@@ -9,6 +9,7 @@ interface Seller {
   rating: number;
   reviewCount: number;
   image?: { url: string } | null; // Match Tenant.image
+  slug: string;
 }
 
 interface SellerInfoProps {
@@ -43,7 +44,7 @@ export function SellerInfo({ seller }: SellerInfoProps) {
       </div>
       <div className="mt-4 flex gap-2 ">
         <Button variant="outline" className="flex-1 bg-[#FAF9F6]" asChild>
-          <Link href={`/tenants/${seller.name}`}>
+          <Link href={`/tenants/${seller.slug}`}>
             <div>View Shop</div>
           </Link>
         </Button>

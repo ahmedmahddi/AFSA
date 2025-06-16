@@ -22,7 +22,7 @@ export function VariantSelector({ variants, onSelect }: VariantSelectorProps) {
 
   const handleSelect = (id: string) => {
     setSelectedId(id);
-    const selected = variants.find(v => v.id === id);
+    const selected = variants.find(v => (v.id ?? v.name) === id);
     if (selected) {
       onSelect(selected);
     }

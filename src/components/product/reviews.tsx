@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
-import Image from "next/image";
-import { User } from "@/payload-types"; 
+// import Image from "next/image";
+import { User } from "@/payload-types";
 
 interface Review {
   id?: string | null;
@@ -52,21 +52,21 @@ export function Reviews({
           >
             <div className="flex items-start">
               <div className="mr-4">
-                <div className="relative h-10 w-10 overflow-hidden rounded-full">
+                {/* <div className="relative h-10 w-10 overflow-hidden rounded-full">
                   <Image
                     src={"/placeholder.svg?height=40&width=40"}
                     alt={typeof review.user === "string" ? review.user : "User"}
                     fill
                     className="object-cover"
                   />
-                </div>
+                </div> */}
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium">
                     {typeof review.user === "string"
                       ? review.user
-                      : "Anonymous"}
+                      : ((review.user as User).username ?? "Anonymous")}
                   </h3>
                   <span className="text-sm text-muted-foreground">
                     {review.reviewDate ?? "Unknown date"}
