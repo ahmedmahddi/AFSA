@@ -9,10 +9,10 @@ export function generateTenantURL(tenantSlug: string) {
   return `/tenants/${tenantSlug}`;
 }
 
-export function formatCurrency(value: number | string) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "TND",
-    maximumFractionDigits: 0,
-  }).format(Number(value));
-}
+export const formatCurrency = (value: number, currency: string = "TND") => {
+  const opts: Intl.NumberFormatOptions = { style: "currency", currency };
+  if (currency === "TND") opts.maximumFractionDigits = 3;
+  else opts.maximumFractionDigits = 2;
+  opts.minimumFractionDigits = 0;
+  return new Intl.NumberFormat("en-US", opts).format(value);
+};

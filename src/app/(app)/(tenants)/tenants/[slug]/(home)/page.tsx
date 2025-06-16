@@ -19,7 +19,7 @@ const pages = async ({ params, searchParams }: Props) => {
   const queryClient = getQueryClient();
   void queryClient.prefetchInfiniteQuery(
     trpc.products.getMany.infiniteQueryOptions({
-      tenantSlug: slug,
+      storeSlug: slug,
       ...filters,
       limit: DEFAULT_LIMIT,
     })
@@ -27,7 +27,7 @@ const pages = async ({ params, searchParams }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductListView tenantSlug={slug} narrowView />
+      <ProductListView storeSlug={slug} narrowView />
     </HydrationBoundary>
   );
 };
